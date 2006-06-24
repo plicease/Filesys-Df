@@ -9,7 +9,7 @@ require 5.006;
 
 @ISA = qw(Exporter DynaLoader);
 @EXPORT = qw(df);
-$VERSION = '0.90';
+$VERSION = '0.91';
 bootstrap Filesys::Df $VERSION;
 
 sub df {
@@ -244,82 +244,77 @@ Filesys::Df - Perl extension for filesystem space.
   my $ref = df("/tmp", 8192);  # output is 8K blocks
   my $ref = df("/tmp", 1);     # output is bytes
 
-
 =head1 DESCRIPTION
 
 This module provides a way to obtain filesystem disk space
 information. This is a Unix only distribution. If you want to
-gather this information for Unix and Windows, use Filesys::DfPortable.
-The only major benefit of using Filesys::Df over Filesys::DfPortable,
-is that Filesys::Df supports the use of open filehandles as arguments.
+gather this information for Unix and Windows, use C<Filesys::DfPortable>.
+The only major benefit of using C<Filesys::Df> over C<Filesys::DfPortable>,
+is that C<Filesys::Df> supports the use of open filehandles as arguments.
 
-The module should work with all flavors of Unix, including
-Mac OS X (Darwin, Tiger, etc), and Cygwin.
+The module should work with all flavors of Unix that implement the
+C<statvfs()> and C<fstatvfs()> calls, or the C<statfs()> and C<fstatfs()> calls.
+This would include Linux, BSD, HP-UX, AIX, Solaris, Darwin, Tiger, 
+Cygwin, etc ...
 
-df() requires a argument that represents the filesystem you want to
+C<df()> requires a argument that represents the filesystem you want to
 query. The argument can be either a scalar directory/file name or an
 open filehandle. There is also an optional block size argument so the
-you can tailor the size of the values returned.  The default for block
-size is 1024, this will cause the function to return the values in 1k
+you can tailor the size of the values returned. The default block 
+size is 1024. This will cause the function to return the values in 1k
 blocks. If you want bytes, set the block size to 1.
 
-df() returns a reference to a hash. The keys available in 
+C<df()> returns a reference to a hash. The keys available in 
 the hash are as follows:
 
-{blocks} = Total blocks on the filesystem.
+C<{blocks}> = Total blocks on the filesystem.
 
-{bfree} = Total blocks free on the filesystem.
+C<{bfree}> = Total blocks free on the filesystem.
 
-{bavail} = Total blocks available to the user executing the Perl 
+C<{bavail}> = Total blocks available to the user executing the Perl 
 application. This can be different than bfree if you have per-user 
 quotas on the filesystem, or if the super user has a reserved amount.
 bavail can also be a negative value because of this. For instance
 if there is more space being used then you have available to you.
 
-{used} = Total blocks used on the filesystem.
+C<{used}> = Total blocks used on the filesystem.
 
-{per} = Percent of disk space used. This is based on the disk space
+C<{per}> = Percent of disk space used. This is based on the disk space
 available to the user executing the application. In other words, if
 the filesystem has 10% of its space reserved for the superuser, then
 the percent used can go up to 110%.
 
-You can obtain inode information through the module as well. But you
-must call exists() on the {files} key to make sure the information is
-available:
-if(exists($ref->{files})) {
-        #### Inode info is available
-}
-Some filesystems may not return inode information, for
-example some NFS filesystems.
-                                                                                                             
+You can obtain inode information through the module as well, but you
+must call C<exists()> on the C<{files}> key first, to make sure the information 
+is available. Some filesystems may not return inode information, for example
+some NFS filesystems.
+
 Here are the available inode keys:
 
-{files} = Total inodes on the filesystem.
+C<{files}> = Total inodes on the filesystem.
 
-{ffree} = Total inodes free on the filesystem.
+C<{ffree}> = Total inodes free on the filesystem.
 
-{favail} = Total inodes available to the user executing the application.
-See the rules for the {bavail} key.
+C<{favail}> = Total inodes available to the user executing the application.
+See the rules for the C<{bavail}> key.
 
-{fused} = Total inodes used on the filesystem.
+C<{fused}> = Total inodes used on the filesystem.
 
-{fper} = Percent of inodes used on the filesystem. See rules for the {per}
+C<{fper}> = Percent of inodes used on the filesystem. See rules for the C<{per}>
 key.
 
-There are some undocumented keys that are defined to maint backwards compatibilty.
-su_blocks, user_blocks, etc ....
+There are some undocumented keys that are defined to maintain backwards
+compatibilty: su_blocks, user_blocks, etc ...
 
-If the df() call fails for any reason, it will return
+If the C<df()> call fails for any reason, it will return
 undef. This will probably happen if you do anything crazy like try
 to get information for /proc, or if you pass an invalid filesystem name,
-or if there is an internal error. df() will croak() if you pass
+or if there is an internal error. C<df()> will C<croak()> if you pass
 it a undefined value.
 
-
 Requirements:
-Your system must contain statvfs() and fstatvfs(), or statfs() and fstatfs()
+Your system must contain C<statvfs()> and C<fstatvfs()>, or C<statfs()> and C<fstatfs()>
 You must be running Perl 5.6 or higher.
-
 
 =head1 AUTHOR
 
@@ -332,7 +327,7 @@ Copyright (c) 2006 Ian Guthrie. All rights reserved.
 
 =head1 SEE ALSO
 
-statvfs(2), fstatvfs(2), df(1M), statfs(1M), fstatfs(1M)
+statvfs(2), fstatvfs(2), statfs(2), fstatfs(2), df(1)
 
 perl(1).
 

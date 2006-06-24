@@ -1,4 +1,8 @@
 Revision history for Perl extension Filesys::Df
 
 0.90  Sat May 15 01:29:11 2006
-	- Revamped whole module
+	- Rewrote most of the module
+
+0.91  Fri Jun 23 10:25:11 2006
+	- Cleaned up documentation a little. No
+	  code changes.
