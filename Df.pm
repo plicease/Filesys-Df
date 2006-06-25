@@ -9,7 +9,7 @@ require 5.006;
 
 @ISA = qw(Exporter DynaLoader);
 @EXPORT = qw(df);
-$VERSION = '0.91';
+$VERSION = '0.92';
 bootstrap Filesys::Df $VERSION;
 
 sub df {
@@ -208,7 +208,7 @@ __END__
 
 =head1 NAME
 
-Filesys::Df - Perl extension for filesystem space.
+Filesys::Df - Perl extension for filesystem disk space information.
 
 =head1 SYNOPSIS
 
@@ -254,12 +254,12 @@ is that C<Filesys::Df> supports the use of open filehandles as arguments.
 
 The module should work with all flavors of Unix that implement the
 C<statvfs()> and C<fstatvfs()> calls, or the C<statfs()> and C<fstatfs()> calls.
-This would include Linux, BSD, HP-UX, AIX, Solaris, Darwin, Tiger, 
+This would include Linux, *BSD, HP-UX, AIX, Solaris, Mac OS X, Irix,
 Cygwin, etc ...
 
 C<df()> requires a argument that represents the filesystem you want to
-query. The argument can be either a scalar directory/file name or an
-open filehandle. There is also an optional block size argument so the
+query. The argument can be either a scalar directory/file name or a
+open filehandle. There is also an optional block size argument so 
 you can tailor the size of the values returned. The default block 
 size is 1024. This will cause the function to return the values in 1k
 blocks. If you want bytes, set the block size to 1.
@@ -272,9 +272,9 @@ C<{blocks}> = Total blocks on the filesystem.
 C<{bfree}> = Total blocks free on the filesystem.
 
 C<{bavail}> = Total blocks available to the user executing the Perl 
-application. This can be different than bfree if you have per-user 
+application. This can be different than C<{bfree}> if you have per-user 
 quotas on the filesystem, or if the super user has a reserved amount.
-bavail can also be a negative value because of this. For instance
+C<{bavail}> can also be a negative value because of this. For instance
 if there is more space being used then you have available to you.
 
 C<{used}> = Total blocks used on the filesystem.
@@ -304,7 +304,7 @@ C<{fper}> = Percent of inodes used on the filesystem. See rules for the C<{per}>
 key.
 
 There are some undocumented keys that are defined to maintain backwards
-compatibilty: su_blocks, user_blocks, etc ...
+compatibilty: C<{su_blocks}>, C<{user_blocks}>, etc ...
 
 If the C<df()> call fails for any reason, it will return
 undef. This will probably happen if you do anything crazy like try
@@ -327,7 +327,7 @@ Copyright (c) 2006 Ian Guthrie. All rights reserved.
 
 =head1 SEE ALSO
 
-statvfs(2), fstatvfs(2), statfs(2), fstatfs(2), df(1)
+statvfs(2), fstatvfs(2), statfs(2), fstatfs(2), df(1), Filesys::DfPortable
 
 perl(1).
 
