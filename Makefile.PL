@@ -163,7 +163,7 @@ sub look_for_header {
 my $header = shift;
 
   	#my @header_inc = split(/\s+/, join(" ", $Config{usrinc}, $Config{locincpth}));
-  	my @header_inc = split(/\s+/, join(" ", $Config{usrinc}));
+  	my @header_inc = split(/\s+/, join(" ", $Config{incpth} ? $Config{incpth} : $Config{usrinc}));
 	foreach $header_path (@header_inc) {
 		if(-f $header_path . '/' . $header) {
 			print "Header found:" , $header_path . '/' . $header, "\n";
